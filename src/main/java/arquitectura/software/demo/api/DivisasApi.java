@@ -1,10 +1,10 @@
 package arquitectura.software.demo.api;
 
 import arquitectura.software.demo.bl.DivisasBl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import arquitectura.software.demo.dto.DivisasDto;
+import arquitectura.software.demo.dto.DivisasRespDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -20,11 +20,10 @@ public class DivisasApi {
     }
 
     @GetMapping ("/convertion")
-    public String convertion(@RequestHeader Map<String, String> headers)throws Exception{
-
-        divisasBl.convert();
-
-        return "hola";
+    public ResponseEntity<DivisasRespDto<DivisasDto>> obtain(@RequestParam String from, @RequestParam String to, @RequestParam BigDecimal amount) throws Exception {
+        DivisasDto divisasDto = divisasBl.convert(from, to, amount);
+        DivisasRespDto<DivisasDto> responseDto = new DivisasRespDto<DivisasDto>(true, "Success", divisasDto);
+        return ResponseEntity.ok(responseDto);
     }
 
 
